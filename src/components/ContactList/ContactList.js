@@ -1,34 +1,37 @@
-import { List, Li, Span, Wrap, Delete } from './ContactListStyles.js';
-
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { List, Li, Span, Wrap, Delete } from './ContactListStyles.js';
+import { getFilter } from 'redux/selectors.js';
+import { getContacts } from 'redux/selectors.js';
 
-const ContactList = ({ persons, changeList }) => (
-  <List>
-    {persons.map(person => (
-      <Li key={person.id}>
-        <Wrap>
-          <Span>
-            <Span>{person.name}</Span>
-            <Span>:{person.number}</Span>
+const ContactList = ({ changeList }) => {
+  const filter = useSelector(getFilter);
+  const contacts = useSelector(getContacts);
+  let persons = filter.filter
+    ? contacts.filter(contact => contact.name.includes(filter.filter))
+    : contacts;
+
+  return (
+    <List>
+      {persons.map(person => (
+        <Li key={person.id}>
+          <Wrap>
             <Span>
-              <Delete onClick={e => changeList(person.id)}>Delete</Delete>
+              <Span>{person.name}</Span>
+              <Span>:{person.number}</Span>
+              <Span>
+                <Delete onClick={e => changeList(person.id)}>Delete</Delete>
+              </Span>
             </Span>
-          </Span>
-        </Wrap>
-      </Li>
-    ))}
-  </List>
-);
+          </Wrap>
+        </Li>
+      ))}
+    </List>
+  );
+};
 
 export { ContactList };
 
 ContactList.propTypes = {
-  persons: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
   changeList: PropTypes.func.isRequired,
 };

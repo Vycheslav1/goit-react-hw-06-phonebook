@@ -12,8 +12,6 @@ import { addContact, deleteContact } from 'redux/contactsSlice.js';
 
 import { setStatusFilter } from 'redux/filterSlice.js';
 
-import { getFilter } from 'redux/selectors.js';
-
 import { getContacts } from 'redux/selectors.js';
 
 import { nanoid } from 'nanoid';
@@ -22,8 +20,6 @@ const PhoneBook = () => {
   const dispatch = useDispatch();
 
   const contacts = useSelector(getContacts);
-
-  const filter = useSelector(getFilter);
 
   const handleChangeList = id => {
     dispatch(deleteContact(id));
@@ -57,16 +53,7 @@ const PhoneBook = () => {
       <ContactForm stateSubmit={handleSubmit} />
       <ContactsTitle>Contacts</ContactsTitle>
       <Filter changeState={handleFilterChange} />
-      {!filter.filter ? (
-        <ContactList persons={contacts} changeList={handleChangeList} />
-      ) : (
-        <ContactList
-          persons={contacts.filter(contact =>
-            contact.name.includes(filter.filter)
-          )}
-          changeList={handleChangeList}
-        />
-      )}
+      <ContactList changeList={handleChangeList} />
     </Div>
   );
 };
