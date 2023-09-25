@@ -1,8 +1,9 @@
-import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { List, Li, Span, Wrap, Delete } from './ContactListStyles.js';
 import { getFilter } from 'redux/selectors.js';
 import { getContacts } from 'redux/selectors.js';
+import { deleteContact } from 'redux/contactsSlice.js';
 
 const ContactList = ({ changeList }) => {
   const filter = useSelector(getFilter);
@@ -10,7 +11,7 @@ const ContactList = ({ changeList }) => {
   let persons = filter.filter
     ? contacts.filter(contact => contact.name.includes(filter.filter))
     : contacts;
-
+  const dispatch = useDispatch();
   return (
     <List>
       {persons.map(person => (
@@ -20,7 +21,9 @@ const ContactList = ({ changeList }) => {
               <Span>{person.name}</Span>
               <Span>:{person.number}</Span>
               <Span>
-                <Delete onClick={e => changeList(person.id)}>Delete</Delete>
+                <Delete onClick={e => dispatch(deleteContact(person.id))}>
+                  Delete
+                </Delete>
               </Span>
             </Span>
           </Wrap>
@@ -31,7 +34,3 @@ const ContactList = ({ changeList }) => {
 };
 
 export { ContactList };
-
-ContactList.propTypes = {
-  changeList: PropTypes.func.isRequired,
-};

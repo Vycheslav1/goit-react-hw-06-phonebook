@@ -1,20 +1,25 @@
+import { useDispatch } from 'react-redux';
+
 import { Label, InputFilter } from './FilterStyles.js';
 
-import PropTypes from 'prop-types';
+import { setStatusFilter } from 'redux/filterSlice.js';
 
 import { nanoid } from 'nanoid';
 
 const InputIdFilter = nanoid();
 
-const Filter = ({ changeState }) => (
-  <Label htmlFor={InputIdFilter}>
-    Find contacts by name
-    <InputFilter type="text" name="filtration" onInput={e => changeState(e)} />
-  </Label>
-);
+const Filter = () => {
+  const dispatch = useDispatch();
 
-export { Filter };
-
-Filter.propTypes = {
-  changeState: PropTypes.func.isRequired,
+  return (
+    <Label htmlFor={InputIdFilter}>
+      Find contacts by name
+      <InputFilter
+        type="text"
+        name="filtration"
+        onInput={e => dispatch(setStatusFilter(e.target.value))}
+      />
+    </Label>
+  );
 };
+export { Filter };
